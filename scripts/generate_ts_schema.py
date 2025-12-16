@@ -7,7 +7,14 @@ the corresponding TypeScript files, ensuring single source of truth.
 """
 
 import sys
+import os
 from pathlib import Path
+
+# Set UTF-8 encoding for Windows compatibility
+if sys.platform == 'win32':
+    os.environ['PYTHONIOENCODING'] = 'utf-8'
+    sys.stdout.reconfigure(encoding='utf-8')
+    sys.stderr.reconfigure(encoding='utf-8')
 
 # Add project root to path to import shared_config
 project_root = Path(__file__).parent.parent
@@ -142,7 +149,7 @@ def main():
         
         boilerplate_script = project_root / "scripts" / "generate_python_boilerplate.py"
         result = subprocess.run([sys.executable, str(boilerplate_script)], 
-                              capture_output=True, text=True)
+                              capture_output=True, text=True, encoding='utf-8', errors='replace')
         
         if result.returncode == 0:
             print(result.stdout)
